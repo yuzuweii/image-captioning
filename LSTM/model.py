@@ -42,7 +42,7 @@ class DecoderRNN(nn.Module):
         sampled_ids = []
         inputs = features.unsqueeze(1)
         for i in range(self.max_seg_length):
-            hiddens, states = self.gru(inputs, states)          
+            hiddens, states = self.lstm(inputs, states)          
             outputs = self.linear(hiddens.squeeze(1))            
             _, predicted = outputs.max(1)                    
             sampled_ids.append(predicted)
@@ -55,7 +55,7 @@ class DecoderRNN(nn.Module):
         for _ in range(max_len):
             all_candidates = []
             for idx_seq in idx_sequences:
-                hiddens, states = self.gru(idx_seq[2].unsqueeze(1), idx_seq[3])
+                hiddens, states = self.lstm(idx_seq[2].unsqueeze(1), idx_seq[3])
                 hiddens_sqz = hiddens.squeeze(1)
                 outputs = self.linear(hiddens_sqz)
                 
